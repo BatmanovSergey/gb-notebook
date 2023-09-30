@@ -38,7 +38,7 @@ public class UserController {
     }
 
     public void updateUser(String userId, User update) {
-        update.setId(Long.parseLong(userId));
+//        update.setId(Long.parseLong(userId));
         repository.update(Long.parseLong(userId), update);
     }
 
@@ -46,7 +46,11 @@ public class UserController {
         repository.delete(Long.parseLong(userId));
     }
 
-    public List<User> getAllUsers (){
+    public List<User> getAllUsers() {
         return repository.findAll();
+    }
+
+    public User getNewUser(List<String> list) {
+        return repository.newUser(list);
     }
 }

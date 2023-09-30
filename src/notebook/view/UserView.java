@@ -3,7 +3,8 @@ package notebook.view;
 import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserView {
@@ -32,7 +33,8 @@ public class UserView {
                 if (com == Commands.EXIT) return;
                 switch (com) {
                     case CREATE:
-                        User u = createUser();
+                        List <String> userList = createUser();
+                        User u = userController.getNewUser(userList);
                         userController.saveUser(u);
                         break;
                     case READ:
@@ -50,10 +52,12 @@ public class UserView {
                         break;
                     case UPDATE:
                         String userId = prompt("Enter user id: ");
+                        List <String> userList1 = createUser();
+                        User u1 = userController.getNewUser(userList1);
                         if (userId.isEmpty()) {
                             throw new RuntimeException("Идентификатор не может быть пустым");
                         } else {
-                            userController.updateUser(userId, createUser());
+                            userController.updateUser(userId, u1);
                         }
                         break;
                     case DELETE:
@@ -82,21 +86,37 @@ public class UserView {
         return in.nextLine();
     }
 
-    private User createUser() {
+//    private User createUser() {
+//
+//        String firstName = prompt("Имя: ");
+////        if (firstName.isEmpty()) {
+////            throw new RuntimeException("Имя не может быть пустым");
+////        }
+//        String lastName = prompt("Фамилия: ");
+////        if (lastName.isEmpty()) {
+////            throw new RuntimeException("Фамилия не может быть пустым");
+////        }
+//        String phone = prompt("Номер телефона: ");
+////        if (phone.isEmpty()) {
+////            throw new RuntimeException("Телефон не может быть пустым");
+////        }
+//        return new User(firstName.replaceAll(" ", ""),
+//                lastName.replaceAll(" ", ""),
+//                phone.replaceAll(" ", ""));
+//    }
+
+    private List <String> createUser() {
+        List <String> fio = new ArrayList<>();
+
         String firstName = prompt("Имя: ");
-//        if (firstName.isEmpty()) {
-//            throw new RuntimeException("Имя не может быть пустым");
-//        }
+        fio.add(firstName.replaceAll(" ", ""));
+
         String lastName = prompt("Фамилия: ");
-//        if (lastName.isEmpty()) {
-//            throw new RuntimeException("Фамилия не может быть пустым");
-//        }
+        fio.add(lastName.replaceAll(" ", ""));
+
         String phone = prompt("Номер телефона: ");
-//        if (phone.isEmpty()) {
-//            throw new RuntimeException("Телефон не может быть пустым");
-//        }
-        return new User(firstName.replaceAll(" ", ""),
-                lastName.replaceAll(" ", ""),
-                phone.replaceAll(" ", ""));
+        fio.add(phone.replaceAll(" ", ""));
+
+        return fio;
     }
 }
