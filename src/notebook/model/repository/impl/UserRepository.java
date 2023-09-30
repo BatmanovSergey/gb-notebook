@@ -30,6 +30,15 @@ public class UserRepository implements GBRepository {
 
     @Override
     public User create(User user) {
+//        if (user.getFirstName().isEmpty()) {
+//            throw new RuntimeException("Имя не может быть пустым");
+//        }
+//        if (user.getLastName().isEmpty()) {
+//            throw new RuntimeException("Фамилия не может быть пустым");
+//        }
+//        if (user.getPhone().isEmpty()) {
+//            throw new RuntimeException("Телефон не может быть пустым");
+//        }
         List<User> users = findAll();
         long max = 0L;
         for (User u : users) {
@@ -52,21 +61,38 @@ public class UserRepository implements GBRepository {
 
     @Override
     public Optional<User> update(Long userId, User update) {
+//        if (userId == null) {
+//            throw new RuntimeException("Идентификатор не может быть пустым");
+//        }
         List<User> users = findAll();
         User editUser = users.stream()
                 .filter(u -> u.getId()
                         .equals(userId))
-                .findFirst().orElseThrow(() -> new RuntimeException("User not found"));
-        editUser.setFirstName(update.getFirstName());
-        editUser.setLastName(update.getLastName());
-        editUser.setPhone(update.getPhone());
+                .findFirst().orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        if (!update.getFirstName().isEmpty()) {
+            editUser.setFirstName(update.getFirstName());
+        }
+        if (!update.getLastName().isEmpty()) {
+            editUser.setLastName(update.getLastName());
+        }
+        if (!update.getPhone().isEmpty()) {
+            editUser.setPhone(update.getPhone());
+        }
         write(users);
         return Optional.of(update);
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        List<User> users = findAll();
+        List<User> newusers = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (i != id-1) {
+                newusers.add(users.get(i));
+            }
+        }
+        write(newusers);
+        return true;
     }
 
     private void write(List<User> users) {
@@ -76,5 +102,4 @@ public class UserRepository implements GBRepository {
         }
         operation.saveAll(lines);
     }
-
 }

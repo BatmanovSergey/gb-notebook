@@ -10,10 +10,20 @@ public class UserController {
     private final GBRepository repository;
 
     public UserController(GBRepository repository) {
+
         this.repository = repository;
     }
 
     public void saveUser(User user) {
+        if (user.getFirstName().isEmpty()) {
+            throw new RuntimeException("Не может быть пустых полей");
+        }
+        if (user.getLastName().isEmpty()) {
+            throw new RuntimeException("Не может быть пустых полей");
+        }
+        if (user.getPhone().isEmpty()) {
+            throw new RuntimeException("Не может быть пустых полей");
+        }
         repository.create(user);
     }
 
@@ -24,12 +34,19 @@ public class UserController {
                 return user;
             }
         }
-
         throw new RuntimeException("User not found");
     }
 
     public void updateUser(String userId, User update) {
         update.setId(Long.parseLong(userId));
         repository.update(Long.parseLong(userId), update);
+    }
+
+    public void deleteUser(String userId) {
+        repository.delete(Long.parseLong(userId));
+    }
+
+    public List<User> getAllUsers (){
+        return repository.findAll();
     }
 }
