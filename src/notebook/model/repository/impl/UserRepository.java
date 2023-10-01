@@ -84,7 +84,7 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public User create(User user) {
+    public void create(User user) {
 //        if (user.getFirstName().isEmpty()) {
 //            throw new RuntimeException("Имя не может быть пустым");
 //        }
@@ -106,7 +106,6 @@ public class UserRepository implements GBRepository {
         user.setId(next);
         users.add(user);
         write(users);
-        return user;
     }
 
     @Override
