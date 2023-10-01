@@ -47,13 +47,10 @@ public class UserView {
                         String id = prompt("Идентификатор пользователя: ");
                         if (id.isEmpty()) {
                             throw new RuntimeException("Идентификатор не может быть пустым");
-                        }
-                        try {
+                        } else {
                             User user = userController.readUser(Long.parseLong(id));
                             System.out.println(user);
                             System.out.println();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
                         }
                         break;
                     case UPDATE:
@@ -79,9 +76,9 @@ public class UserView {
                         break;
                 }
             } catch (IllegalArgumentException e) {
-                System.out.printf("----------------\n" +
-                        "Команды %s не существует!!!\n" +
-                        "----------------\n", command);
+                System.out.println("----------------\n" +
+                        "Ошибка ввода данных. Повторите попытку!!!\n" +
+                        "----------------");
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
