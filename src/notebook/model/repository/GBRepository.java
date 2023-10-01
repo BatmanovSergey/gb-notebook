@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GBRepository {
-    User newUser(List<String> list);
+    User createNewUserNoId(List<String> list);
     List<String> readAll();
     void saveAll(List<String> data);
     List<User> findAll();

@@ -51,6 +51,6 @@ public class UserController {
     }
 
     public User getNewUser(List<String> list) {
-        return repository.newUser(list);
+        return repository.createNewUserNoId(list);
     }
 }

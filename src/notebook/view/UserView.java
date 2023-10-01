@@ -18,7 +18,9 @@ public class UserView {
         Commands com;
 
         while (true) {
-            String command = prompt("'Доступные команды':\n" + "----------------\n" +
+            String command = prompt("----------------\n" +
+                    "'Доступные команды':\n" +
+                    "----------------\n" +
                     "CREATE: Создать пользователя.\n" +
                     "READ: Показать пользователя.\n" +
                     "UPDATE: Обновить информацию о пользователе.\n" +
@@ -33,8 +35,8 @@ public class UserView {
                 if (com == Commands.EXIT) return;
                 switch (com) {
                     case CREATE:
-                        List <String> userList = createUser();
-                        User u = userController.getNewUser(userList);
+                        List <String> userinitials = enterinitials();
+                        User u = userController.getNewUser(userinitials);
                         userController.saveUser(u);
                         break;
                     case READ:
@@ -52,8 +54,8 @@ public class UserView {
                         break;
                     case UPDATE:
                         String userId = prompt("Enter user id: ");
-                        List <String> userList1 = createUser();
-                        User u1 = userController.getNewUser(userList1);
+                        List <String> initials = enterinitials();
+                        User u1 = userController.getNewUser(initials);
                         if (userId.isEmpty()) {
                             throw new RuntimeException("Идентификатор не может быть пустым");
                         } else {
@@ -73,20 +75,35 @@ public class UserView {
                         break;
                 }
             } catch (IllegalArgumentException e) {
-                System.out.printf("----------------\n" + "Команды %s не существует!!!\n" + "----------------\n", command);
+                System.out.printf("----------------\n" +
+                        "Команды %s не существует!!!\n" +
+                        "----------------\n", command);
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
-
     private String prompt(String message) {
         Scanner in = new Scanner(System.in);
         System.out.print(message);
         return in.nextLine();
     }
+    private List <String> enterinitials() {
+        List <String> initials = new ArrayList<>();
 
-//    private User createUser() {
+        String firstName = prompt("Имя: ");
+        initials.add(firstName.replaceAll(" ", ""));
+
+        String lastName = prompt("Фамилия: ");
+        initials.add(lastName.replaceAll(" ", ""));
+
+        String phone = prompt("Номер телефона: ");
+        initials.add(phone.replaceAll(" ", ""));
+
+        return initials;
+    }
+
+    //    private User createUser() {
 //
 //        String firstName = prompt("Имя: ");
 ////        if (firstName.isEmpty()) {
@@ -104,19 +121,4 @@ public class UserView {
 //                lastName.replaceAll(" ", ""),
 //                phone.replaceAll(" ", ""));
 //    }
-
-    private List <String> createUser() {
-        List <String> fio = new ArrayList<>();
-
-        String firstName = prompt("Имя: ");
-        fio.add(firstName.replaceAll(" ", ""));
-
-        String lastName = prompt("Фамилия: ");
-        fio.add(lastName.replaceAll(" ", ""));
-
-        String phone = prompt("Номер телефона: ");
-        fio.add(phone.replaceAll(" ", ""));
-
-        return fio;
-    }
 }

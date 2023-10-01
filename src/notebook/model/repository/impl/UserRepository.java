@@ -24,9 +24,9 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public User newUser(List<String> list) {
-        User u = new User(list.get(0),list.get(1),list.get(2));
-        return u;
+    public User createNewUserNoId(List<String> list) {
+        User user = new User(list.get(0), list.get(1), list.get(2));
+        return user;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class UserRepository implements GBRepository {
         long max = 0L;
         for (User u : users) {
             long id = u.getId();
-            if (max < id){
+            if (max < id) {
                 max = id;
             }
         }
@@ -139,19 +139,24 @@ public class UserRepository implements GBRepository {
     @Override
     public boolean delete(Long id) {
         List<User> users = findAll();
-        List<User> newUsers = new ArrayList<>();
+        List<User> reWriteUsers = new ArrayList<>();
         for (User user : users) {
             if (!user.getId().equals(id)) {
-                newUsers.add(user);
+                reWriteUsers.add(user);
             }
         }
-        write(newUsers);
-        return true;
+        if (users.size() == reWriteUsers.size()) {
+            throw new RuntimeException("Такого пользователя не существует!!!");
+        } else {
+            write(reWriteUsers);
+            System.out.println("Пользователь удалён в базы данных!!!");
+            return true;
+        }
     }
 
     private void write(List<User> users) {
         List<String> lines = new ArrayList<>();
-        for (User u: users) {
+        for (User u : users) {
             lines.add(mapper.toInput(u));
         }
         saveAll(lines);
