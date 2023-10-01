@@ -3,6 +3,7 @@ package notebook.view;
 import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,10 +33,13 @@ public class UserView {
 
             try {
                 com = Commands.valueOf(command);
-                if (com == Commands.EXIT) return;
+                if (com == Commands.EXIT) {
+                    System.out.println("Вы завершили работу приложения!");
+                    return;
+                }
                 switch (com) {
                     case CREATE:
-                        List <String> userinitials = enterinitials();
+                        List<String> userinitials = enterinitials();
                         User u = userController.getNewUser(userinitials);
                         userController.saveUser(u);
                         break;
@@ -54,11 +58,11 @@ public class UserView {
                         break;
                     case UPDATE:
                         String userId = prompt("Enter user id: ");
-                        List <String> initials = enterinitials();
-                        User u1 = userController.getNewUser(initials);
                         if (userId.isEmpty()) {
                             throw new RuntimeException("Идентификатор не может быть пустым");
                         } else {
+                            List<String> initials = enterinitials();
+                            User u1 = userController.getNewUser(initials);
                             userController.updateUser(userId, u1);
                         }
                         break;
@@ -83,13 +87,15 @@ public class UserView {
             }
         }
     }
+
     private String prompt(String message) {
         Scanner in = new Scanner(System.in);
         System.out.print(message);
         return in.nextLine();
     }
-    private List <String> enterinitials() {
-        List <String> initials = new ArrayList<>();
+
+    private List<String> enterinitials() {
+        List<String> initials = new ArrayList<>();
 
         String firstName = prompt("Имя: ");
         initials.add(firstName.replaceAll(" ", ""));
