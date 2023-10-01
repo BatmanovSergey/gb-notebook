@@ -7,6 +7,7 @@ import notebook.model.repository.GBRepository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserRepository implements GBRepository {
@@ -109,8 +110,14 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return Optional.empty();
+    public User findById(Long id) {
+        List<User> users = findAll();
+        for (User user : users) {
+            if (Objects.equals(user.getId(), id)) {
+                return user;
+            }
+        }
+        throw new RuntimeException("Пользователь не найден!");
     }
 
     @Override
